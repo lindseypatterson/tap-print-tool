@@ -332,13 +332,25 @@ function drawGC(ctx, v, W, H) {
   // "GIFT CERTIFICATE"
   txt(ctx, "GIFT CERTIFICATE", cx, boxT+148, 64, "800", "#ffffff", "center");
 
+  // Event name (auto-scales to fit green box)
+  const eventName = v.gn ? v.gn.trim() : "";
+  if (eventName) {
+    let eventSize = 56;
+    ctx.font = "700 " + eventSize + "px Inter,sans-serif";
+    while (ctx.measureText(eventName).width > (boxR - boxL - pad * 2) && eventSize > 34) {
+      eventSize -= 2;
+      ctx.font = "700 " + eventSize + "px Inter,sans-serif";
+    }
+    txt(ctx, eventName, cx, boxT + 225, eventSize, "700", "rgba(255,255,255,0.95)", "center");
+  }
+
   // Dollar amount — big centered
   const amt = v.ga ? "$" + v.ga : "";
   if (amt) {
-    txt(ctx, amt, cx, boxT+330, 200, "900", "#ffffff", "center");
+    txt(ctx, amt, cx, boxT+350, 200, "900", "#ffffff", "center");
   } else {
     // placeholder ghost
-    txt(ctx, "$", cx, boxT+330, 200, "900", "rgba(255,255,255,0.15)", "center");
+    txt(ctx, "$", cx, boxT+350, 200, "900", "rgba(255,255,255,0.15)", "center");
   }
 
   // Promo code section
@@ -384,6 +396,18 @@ function drawGC(ctx, v, W, H) {
 
 function drawPC(ctx, v, W, H) {
   const cx = W / 2;
+
+  // Event name headline at top
+  const eventName = v.pn ? v.pn.trim() : "";
+  if (eventName) {
+    let eventSize = 74;
+    ctx.font = "800 " + eventSize + "px Inter,sans-serif";
+    while (ctx.measureText(eventName).width > W - 150 && eventSize > 42) {
+      eventSize -= 2;
+      ctx.font = "800 " + eventSize + "px Inter,sans-serif";
+    }
+    txt(ctx, eventName.toUpperCase(), cx, 175, eventSize, "800", "#ffffff", "center");
+  }
 
   // Auto-format discount: "10" → "10% OFF", "10% OFF" → "10% OFF"
   const rawDisc = v.pd ? v.pd.trim() : "";
